@@ -15,7 +15,7 @@ import shutil
 import zipfile
 import logging
 import json
-import sys
+from config import *
 
 
 class ElementNotFound(Exception):
@@ -38,20 +38,10 @@ log = logging.getLogger('revizor')
 log.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s: %(message)s")
 
-# log to file
-fh = logging.FileHandler('tmp/revizor.log')
-fh.setFormatter(formatter)
-log.addHandler(fh)
-
 # log to console
 ch = logging.StreamHandler()
 ch.setFormatter(formatter)
 log.addHandler(ch)
-
-
-def clear_log():
-    with open('tmp/revizor.log', 'w') as logfile:
-        logfile.truncate()
 
 
 def sleep_rand_s(min_t: float = 0.05, max_t: float = 0.5):
@@ -72,7 +62,7 @@ def check_el(el):
 
 def get_captcha_id_n_url(url: str) -> (Session, int, str):
     s = Session()
-    s.verify = 'rfc-revizorru.crt'
+    s.verify = False
 
     href = url + '/login/'
 
@@ -335,20 +325,19 @@ def unpack_archive(arch_file: str, unpack_to: str):
 
 if __name__ == '__main__':
 
-    portal_url = 'https://portal.rfc-revizor.ru'
-    wait_report_done = 300
-    clear_log()
-
     log.debug('-------- start --------')
 
+    os.makedirs('tmp/unpacked', exist_ok=True)
+    os.makedirs('tmp/captcha_img', exist_ok=True)
+
     log.debug('logging in ' + portal_url)
-    session = login('//@//.//', '//', portal_url)
+    session = login(auth_email, auth_password, portal_url)
 
     log.debug('order new report')
     today = date.today()
-    yesterday = today - timedelta(days=1)
-    report_dt = order_new_report(
-        session, portal_url, yesterday if len(sys.argv) > 1 and sys.argv[1] == 'yesterday' else today)
+    report_dt = order_new_report(session,
+                                 portal_url,
+                                 today - timedelta(days=1) if yesterday else today)
 
     log.debug('got new order report datetime ' + report_dt)
 
