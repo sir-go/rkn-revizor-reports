@@ -1,3 +1,5 @@
 .idea
 __pycache__
 tmp/
+*.env*
+tests/data/unpacked-test/

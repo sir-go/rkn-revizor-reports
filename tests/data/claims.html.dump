@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div class="container sidebar-extended">
+    <header>
+        <a href="/"><img class="logo"
+                                                      src="claims_files/logo.png"></a>
+        </div>
+        <div class="settings">
+            <div class="inline user-menu-avatar">
+                <img src="claims_files/user-menu-avatar.png">
+            </div>
+            <a class="user-menu-link"
+               href="/cabinet/user/profile/"
+               title=""><img src="claims_files/user-menu-arrow.png"></a>
+            <div class="user-menu-block">
+
+                <ul>
+                    <li>
+                        <a href="/cabinet/user/profile/">профиль</a>
+                    </li>
+                    <li style="padding-bottom: 15px;"><a
+                            href="/cabinet/user/password/edit/">сменить
+                        пароль</a></li>
+                    <li class="divide"><a
+                            href="/logout/">выйти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="sidebar extended">
+        <ul class="menu ">
+            <li class="item  ">
+                <a href="/cabinet/myclaims/">
+                    <img src="claims_files/icon-myclaims.png">
+                    <span>Мои заявки </span>
+                </a>
+            </li>
+            <li class="item active">
+                <a href="/cabinet/claims/">
+                    <img src="claims_files/icon-allclaims.png"> <span>Все заявки</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/myagents/">
+                    <img src="claims_files/icon-myagents.png">
+                    <span>Мои агенты</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/agents/">
+                    <img src="claims_files/icon-allagents.png"> <span>Все агенты</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/myclaims-reports/">
+                    <img src="claims_files/icon-myclaims-quality.png"> <span>Мои отчеты по качеству блокировок</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/claims-reports/">
+                    <img src="claims_files/icon-allclaims-quality.png"> <span>Все отчеты по качеству блокировок</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/download/">
+                    <img src="claims_files/icon-files.png">
+                    <span>Инструкции</span>
+                </a>
+            </li>
+        </ul>
+        <div class="toggle">
+            <a href="">
+                <img src="claims_files/icon-arrow-right.png"><span> Свернуть меню</span>
+            </a>
+        </div>
+    </div>
+    <div class="main column">
+        <div class="header">
+            <h2 class="title">
+                Все заявки по агентам
+            </h2>
+
+        </div>
+        <table class="watching" data-source="/cabinet/claims/">
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Дата создания</th>
+                <th>Почтовый адрес</th>
+                <th>Статус</th>
+                <th>Результат</th>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="add-info column">
+
+        <div class="header">
+            <h2 class="title not-select">
+                Выберите заявку
+            </h2>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="layer layer-header">
+        <header class="center-row">
+
+            <nav>
+                <a class="logo" href="/">
+                    <img src="/assets/images/logo.png">
+                </a>
+                <ul class="list-inline margin-main">
+                    <li>
+                        <a href="/#layer">Нормативные акты</a>
+                    </li>
+                    <li>
+                        <a href="/registration/">Регистрация</a>
+                    </li>
+                </ul>
+                <ul class="list-inline pull-right">
+                    <li>
+                        <a href="/wbmodeon/">Версия для слабовидящих</a>
+
+                    </li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <div class="layer layer-default">
+        <div class="center-row block block-enter">
+            <h2 class="title-page">Авторизация</h2>
+            <form action="" method="POST">
+                <div class="alarm-block">
+                </div>
+                <p>E-mail</p>
+                <input required type="text" name="email" value="">
+
+                <p>Пароль</p>
+                <input required type="password" name="password">
+
+                <br>
+                <br>
+                <p>Введите символы на изображении</p>
+                <input required type="text" class="secretform"
+                       name="secretcodestatus" autocomplete="off" value=""
+                       maxlength="8">
+                <input type=hidden name='secretcodeId' value=822915> <img
+                    src="/captcha/822915" alt="captcha" width="170"
+                    height="50">
+                <br>
+                <br>
+                <br>
+
+                <button class="button" type="submit">ВОЙТИ</button>
+                <br>
+                <br>
+                <br>
+
+                <a href="/login/forget/">Забыли пароль?</a>
+            </form>
+        </div>
+    </div>
+    <div class="layer layer-urls">
+    </div>
+    <div class="layer layer-footer">
+    </div>
+</div>
+</body>
+
+</html>

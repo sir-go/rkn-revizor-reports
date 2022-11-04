@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="/favicon.png"/>
+    <title>Личный кабинет оператора связи</title>
+
+    <!-- CSS vendors-->
+    <link rel="stylesheet" href="/assets/css/vendor/normalize.css">
+    <link rel="stylesheet" href="/assets/css/vendor/chosen.css">
+    <link rel="stylesheet" href="/assets/css/vendor/jquery-ui.min.css">
+    <!-- CSS custom-->
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/cabinet.css?1667589002">
+    <link rel="stylesheet" href="/assets/css/common.css?1667589002">
+    <!--  CSS Black -->
+
+    <!-- JS vendors-->
+    <script src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="/assets/js/vendor/chosen.jquery.min.js"></script>
+    <script src="/assets/js/vendor/jquery-ui.min.js"></script>
+    <!-- JS custom-->
+    <script src="/assets/js/cabinet.js?1667589002"></script>
+    <script src="/assets/js/fias.js"></script>
+
+    <!--<script src="/js/jquery.chained.remote.min.js"></script>-->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="container sidebar-extended">
+    <header>
+        <a href="/"><img class="logo" src="/assets/images/logo.png"></a>
+        <div class="settings">
+            <div class="inline user-menu-avatar">
+                <img src="/assets/images/user-menu-avatar.png">
+            </div>
+            <a class="user-menu-link" href="/cabinet/user/profile/"
+               title=""><img src="/assets/images/user-menu-arrow.png"></a>
+            <div class="user-menu-block">
+
+                <ul>
+                    <li><a href="/cabinet/user/profile/">профиль</a></li>
+                    <li style="padding-bottom: 15px;"><a
+                            href="/cabinet/user/password/edit/">сменить
+                        пароль</a></li>
+                    <li class="divide"><a href="/logout/">выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="sidebar extended">
+        <ul class="menu ">
+            <li class="item  ">
+                <a href="/cabinet/myclaims/">
+                    <img src="/assets/images/icon-myclaims.png"> <span>Мои заявки </span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/claims/">
+                    <img src="/assets/images/icon-allclaims.png"> <span>Все заявки</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/myagents/">
+                    <img src="/assets/images/icon-myagents.png"> <span>Мои агенты</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/agents/">
+                    <img src="/assets/images/icon-allagents.png"> <span>Все агенты</span>
+                </a>
+            </li>
+            <li class="item active">
+                <a href="/cabinet/myclaims-reports/">
+                    <img src="/assets/images/icon-myclaims-quality.png"> <span>Мои отчеты по качеству блокировок</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/claims-reports/">
+                    <img src="/assets/images/icon-allclaims-quality.png">
+                    <span>Все отчеты по качеству блокировок</span>
+                </a>
+            </li>
+            <li class="item ">
+                <a href="/cabinet/download/">
+                    <img src="/assets/images/icon-files.png">
+                    <span>Инструкции</span>
+                </a>
+            </li>
+        </ul>
+        <div class="toggle">
+            <a href="">
+                <img src="/assets/images/icon-arrow-right.png"><span> Свернуть меню</span>
+            </a>
+        </div>
+    </div>
+    <div class="default single  column">
+        <div class="header">
+            <h2 class="title">
+                Мои отчеты
+            </h2>
+            <a href="/cabinet/myclaims-reports/create">
+                <button type="submit" class="button button-add">ПОДАТЬ ЗАПРОС
+                </button>
+            </a>
+        </div>
+        <form action="/cabinet/myclaims-reports/" method="post">
+            <table class="watching list-table" data-source="/cabinet/claims/">
+                <thead>
+                <tr>
+                    <th>Дата создания запроса</th>
+                    <th>Дата, на которую формируется отчет</th>
+                    <th>Только по "моим" агентам</th>
+                    <th>Статус запроса</th>
+                    <th>Дата получения статуса</th>
+                    <th>Отчет</th>
+                    <th></th>
+                </tr>
+                <tr class="filters-fields">
+                    <th></th>
+                    <th>
+                        <input class="calendar" name="reportDate_from"
+                               type='text' value=""> -
+                        <input class="calendar" name="reportDate_to"
+                               type='text' value="">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="padding: 10px 5px;">
+                        <button class="button button-add" type="submit">ПОИСК
+                        </button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+                <tr>
+                    <td>04.11.2022 22:10</td>
+                    <td>04.11.2022</td>
+                    <td></td>
+                    <td>новый</td>
+                    <td>04.11.2022 22:10</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>04.11.2022 13:08</td>
+                    <td>02.11.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>04.11.2022 13:09</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11065029.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>04.11.2022 01:07</td>
+                    <td>02.11.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>04.11.2022 01:08</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11060472.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>03.11.2022 13:10</td>
+                    <td>01.11.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>03.11.2022 13:11</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11056042.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>03.11.2022 01:07</td>
+                    <td>01.11.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>03.11.2022 01:08</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11051409.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>02.11.2022 13:08</td>
+                    <td>31.10.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>02.11.2022 13:09</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11046982.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>02.11.2022 01:11</td>
+                    <td>31.10.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>02.11.2022 01:12</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11042420.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>01.11.2022 13:12</td>
+                    <td>30.10.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>01.11.2022 13:13</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11037965.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>01.11.2022 01:06</td>
+                    <td>30.10.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>01.11.2022 01:07</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11033297.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>31.10.2022 13:07</td>
+                    <td>29.10.2022</td>
+                    <td></td>
+                    <td>результат готов</td>
+                    <td>31.10.2022 13:08</td>
+                    <td>
+                        <a href="/cabinet/claims-reports/download/11028742.zip">скачать</a>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <ul class="pagination list-inline">
+            <li class='active'><a
+                    href="/cabinet/myclaims-reports/page/1/">1</a></li>
+            <li class=''><a href="/cabinet/myclaims-reports/page/2/">2</a></li>
+            <li class=''><a href="/cabinet/myclaims-reports/page/3/">3</a></li>
+            <li class=''><a href="/cabinet/myclaims-reports/page/4/">4</a></li>
+            <li class=''><a href="/cabinet/myclaims-reports/page/2/">След.</a>
+            </li>
+            <li><a href="/cabinet/myclaims-reports/page/761/">&raquo;</a></li>
+            <li><span> всего: 7606 </span></li>
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>

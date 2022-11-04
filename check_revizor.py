@@ -1,5 +1,4 @@
 # coding:utf8
-
 from requests import Session
 from lxml import html
 from PIL import Image
@@ -15,7 +14,6 @@ import shutil
 import zipfile
 import logging
 import json
-from config import *
 
 
 class ElementNotFound(Exception):
@@ -34,14 +32,21 @@ class TimedOut(Exception):
     pass
 
 
-log = logging.getLogger('revizor')
-log.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s: %(message)s")
+def init_logging() -> logging.Logger:
+    _log = logging.getLogger('revizor')
+    _log.setLevel(logging.DEBUG)
+    # noinspection SpellCheckingInspection
+    formatter = logging.Formatter("%(asctime)s: %(message)s")
 
-# log to console
-ch = logging.StreamHandler()
-ch.setFormatter(formatter)
-log.addHandler(ch)
+    if __name__ == '__main__':
+        ch = logging.StreamHandler()
+        ch.setFormatter(formatter)
+        _log.addHandler(ch)
+
+    return _log
+
+
+log = init_logging()
 
 
 def sleep_rand_s(min_t: float = 0.05, max_t: float = 0.5):
@@ -50,16 +55,12 @@ def sleep_rand_s(min_t: float = 0.05, max_t: float = 0.5):
     sleep(timeout)
 
 
-def check_response(resp):
-    if not (resp and resp.ok):
-        raise GetFailed()
-
-
 def check_el(el):
     if el is None:
-        raise ElementNotFound()
+        raise ElementNotFound
 
 
+# noinspection SpellCheckingInspection
 def get_captcha_id_n_url(url: str) -> (Session, int, str):
     s = Session()
     s.verify = False
@@ -68,8 +69,7 @@ def get_captcha_id_n_url(url: str) -> (Session, int, str):
 
     log.debug('get page ' + href)
     page = s.get(href)
-
-    check_response(page)
+    page.raise_for_status()
 
     log.debug('parse page')
     dom = html.document_fromstring(page.content)
@@ -84,8 +84,7 @@ def get_captcha_id_n_url(url: str) -> (Session, int, str):
 def get_captcha_img(s: Session, captcha_url: str) -> Image:
     log.debug('get an image ' + captcha_url)
     img_resp = s.get(captcha_url)
-
-    check_response(img_resp)
+    img_resp.raise_for_status()
 
     return Image.open(BytesIO(img_resp.content))
 
@@ -136,7 +135,7 @@ def recognize(cl_img: Image) -> str:
     return ''.join([c for c in tess_result if c in digits])
 
 
-def grab_captcha(url: str, save_images=None) -> (Session, int, int):
+def grab_captcha(url: str, save_images: str = None) -> (Session, int, int):
     results = dict()
     winner = None
     winner_condition = 5
@@ -166,12 +165,10 @@ def grab_captcha(url: str, save_images=None) -> (Session, int, int):
         c_img_clean = clean_img(c_img)
 
         if save_images is not None:
-            filename = os.path.join(
-                save_images,
-                'c_{}_a_{}.png'.format(c_id, attempt)
-            )
-            log.debug('save image to ' + filename)
-            c_img_clean.save(filename)
+            c_img.save(
+                os.path.join(save_images, f'c_{c_id}_o_{attempt}.png'))
+            c_img_clean.save(
+                os.path.join(save_images, f'c_{c_id}_a_{attempt}.png'))
 
         recognized = recognize(c_img_clean)
 
@@ -199,6 +196,7 @@ def grab_captcha(url: str, save_images=None) -> (Session, int, int):
     return s, int(c_id), int(winner)
 
 
+# noinspection SpellCheckingInspection
 def login(username: str, password: str, url: str, retries: int = 5) -> Session:
     try_num = 0
     while try_num <= retries:
@@ -206,7 +204,7 @@ def login(username: str, password: str, url: str, retries: int = 5) -> Session:
 
         log.debug('try {}/{}'.format(try_num, retries))
 
-        s, captcha_id, captcha_value = grab_captcha(url, 'tmp/captcha_img')
+        s, captcha_id, captcha_value = grab_captcha(url)
 
         href = url + '/login/'
 
@@ -226,13 +224,12 @@ def login(username: str, password: str, url: str, retries: int = 5) -> Session:
                 'secretcodestatus': captcha_value
             }
         )
-
-        check_response(post_res)
+        post_res.raise_for_status()
 
         if post_res.content.find(b'user-menu-link') > -1:
             return s
 
-    raise LoginFailed()
+    raise LoginFailed
 
 
 def parse_new_order_dt(post_result: bytes) -> str:
@@ -250,7 +247,7 @@ def parse_new_order_dt(post_result: bytes) -> str:
 
         return first_td
 
-    raise ElementNotFound()
+    raise ElementNotFound
 
 
 def get_orders_table(s: Session, url: str) -> bytes:
@@ -263,8 +260,7 @@ def get_orders_table(s: Session, url: str) -> bytes:
             'Referer': href
         }
     )
-
-    check_response(orders_table)
+    orders_table.raise_for_status()
 
     return orders_table.content
 
@@ -274,9 +270,9 @@ def parse_order_href(get_result: bytes, dt: str) -> str:
     table_el = dom.xpath("//*[@class='watching list-table']")
 
     if not table_el:
-        raise ElementNotFound()
+        raise ElementNotFound
 
-    rep_done_a = table_el[0].xpath("tbody/tr/td[text()='{}']/../td/a".format(dt))
+    rep_done_a = table_el[0].xpath(f"tbody/tr/td[text()='{dt}']/../td/a")
     if not rep_done_a:
         return ''
 
@@ -295,15 +291,14 @@ def order_new_report(s: Session, url: str, day: date) -> str:
         },
         data={'reportDate': day.strftime('%d.%m.%Y')}
     )
-    check_response(post_res)
+    post_res.raise_for_status()
     return parse_new_order_dt(post_res.content)
 
 
 def get_report_archive(s: Session, url: str, save_to: str):
     log.debug('get report file ' + url)
     get_res = s.get(url, stream=True)
-
-    check_response(get_res)
+    get_res.raise_for_status()
 
     log.debug('save report archive file to ' + save_to)
     with open(save_to, 'wb') as report_archive_file:
@@ -323,21 +318,23 @@ def unpack_archive(arch_file: str, unpack_to: str):
     zip_ref.close()
 
 
-if __name__ == '__main__':
-
-    log.debug('-------- start --------')
-
-    os.makedirs('tmp/unpacked', exist_ok=True)
+def get_and_analyze_report(
+        url: str,
+        wait: int,
+        email: str,
+        password: str,
+        yesterday: bool,
+        unpack_path: str) -> bool:
+    os.makedirs(unpack_path, exist_ok=True)
     os.makedirs('tmp/captcha_img', exist_ok=True)
 
-    log.debug('logging in ' + portal_url)
-    session = login(auth_email, auth_password, portal_url)
+    log.debug('logging in ' + url)
+    session = login(email, password, url)
 
     log.debug('order new report')
     today = date.today()
-    report_dt = order_new_report(session,
-                                 portal_url,
-                                 today - timedelta(days=1) if yesterday else today)
+    report_dt = order_new_report(
+        session, url, today - timedelta(days=1) if yesterday else today)
 
     log.debug('got new order report datetime ' + report_dt)
 
@@ -345,9 +342,10 @@ if __name__ == '__main__':
 
     log.debug('wait till report is made')
     t0 = time()
-    while time() - t0 < wait_report_done:
+    while time() - t0 < wait:
         log.debug('check report status')
-        report_href = parse_order_href(get_orders_table(session, portal_url), report_dt)
+        report_href = parse_order_href(
+            get_orders_table(session, url), report_dt)
         if report_href:
             log.debug('report is done, href: ' + report_href)
             break
@@ -355,15 +353,29 @@ if __name__ == '__main__':
         sleep_rand_s(15, 60)
 
     if not report_href:
-        log.error('timed out {}s'.format(wait_report_done))
-        raise TimedOut()
+        log.error('timed out {}s'.format(wait))
+        raise TimedOut
 
-    get_report_archive(session, portal_url + report_href, 'tmp/rep_arch.zip')
-    unpack_archive('tmp/rep_arch.zip', 'tmp/unpacked/')
+    get_report_archive(session, url + report_href, 'tmp/rep_arch.zip')
+    unpack_archive('tmp/rep_arch.zip', unpack_path)
 
-    if os.path.getsize('tmp/unpacked/report.csv') > 270:
+    if os.path.getsize(os.path.join(unpack_path, 'report.csv')) > 270:
         log.warning('report is not good')
-        exit(1)
-    else:
-        log.debug('report is clean')
-        exit(0)
+        return True
+
+    log.debug('report is clean')
+    return False
+
+
+if __name__ == '__main__':
+    log.debug('-------- start --------')
+    conf = dict(
+        url=os.environ.get('RKN_REP_URL'),
+        wait=int(os.environ.get('RKN_REP_WAIT', 300)),
+        email=os.environ.get('RKN_REP_EMAIL'),
+        password=os.environ.get('RKN_REP_PASSWORD'),
+        yesterday=os.environ.get('RKN_REP_YESTERDAY', True) in [
+            True, 1, 'yes', 'y', 'True', 'true', 'on'],
+        unpack_path=os.environ.get('RKN_REP_OUT', 'tmp/unpacked/')
+    )
+    exit(int(get_and_analyze_report(**conf)))
