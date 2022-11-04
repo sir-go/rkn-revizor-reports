@@ -1,3 +1,5 @@
+[![Tests](https://github.com/sir-go/rkn-revizor-reports/actions/workflows/python-app.yml/badge.svg)](https://github.com/sir-go/rkn-revizor-reports/actions/workflows/python-app.yml)
+
 ## RKN reports getting automation
 
 ### What this script does:
