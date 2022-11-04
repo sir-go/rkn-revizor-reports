@@ -5,7 +5,7 @@ COPY requirements.txt requirements.txt
 RUN python -m pip install --upgrade pip && \
     pip install -r requirements.txt
 
-COPY check_revizor.py app.py
+COPY check_revizor.py check_revizor.py
 
 ARG UID=1000
 ARG GID=1000
@@ -19,4 +19,4 @@ USER non-root-user
 
 RUN mkdir $OUT
 
-CMD [ "python", "app.py"]
+CMD [ "python", "check_revizor.py"]
